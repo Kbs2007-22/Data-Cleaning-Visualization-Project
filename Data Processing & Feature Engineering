@@ -1,0 +1,8 @@
+# Convert text dates into actual datetime objects for time-series analysis
+df['Date'] = pd.to_datetime(df['Date'])
+
+# Create a new key metric: Total Revenue
+df['Total_Revenue'] = df['Price'] * df['Quantity']
+
+# Sort chronologically
+df = df.sort_values('Date')
