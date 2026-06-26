@@ -1,0 +1,34 @@
+# Set a clean visual theme
+sns.set_theme(style="whitegrid")
+
+# Create a figure with 2 subplots (1 row, 2 columns)
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+# Visual 1: Total Revenue by Category (Bar Chart)
+# This answers: "Where are we making our money?"
+sns.barplot(
+    data=df, 
+    x='Category', 
+    y='Total_Revenue', 
+    estimator=sum, # Aggregates the total sum per category
+    ax=axes[0], 
+    palette='viridis'
+)
+axes[0].set_title('Total Revenue by Category', fontsize=14, fontweight='bold')
+axes[0].set_ylabel('Revenue ($)')
+
+# Visual 2: Price Distribution (Histogram + KDE)
+# This answers: "What is our typical price point after fixing outliers?"
+sns.histplot(
+    df['Price'], 
+    bins=6, 
+    kde=True, # Adds a kernel density curve for the trend
+    ax=axes[1], 
+    color='coral'
+)
+axes[1].set_title('Distribution of Item Prices', fontsize=14, fontweight='bold')
+axes[1].set_xlabel('Price ($)')
+
+# Adjust layout to prevent overlap
+plt.tight_layout()
+plt.show()
