@@ -1,0 +1,25 @@
+# A. Handle Duplicates
+# Drops rows that are exactly identical across all columns
+df = df.drop_duplicates()
+
+# B. Handle Missing Values
+# Impute (fill) numerical missing values with the median to avoid outlier skew
+df['Quantity'] = df['Quantity'].fillna(df['Quantity'].median())
+
+# Drop rows where critical categorical data is missing
+df = df.dropna(subset=['Date', 'Category'])
+
+# C. Handle Outliers & Errors
+# First, remove impossible physical values (e.g., negative prices)
+df = df[df['Price'] > 0]
+
+# Next, cap mathematical outliers using the Interquartile Range (IQR) method
+Q1 = df['Price'].quantile(0.25)
+Q3 = df['Price'].quantile(0.75)
+IQR = Q3 - Q1
+upper_bound = Q3 + 1.5 * IQR
+
+# Any price above the upper bound gets clipped down to the boundary
+df.loc[df['Price'] > upper_bound, 'Price'] = upper_bound
+
+print("Clean Data Shape:", df.shape)
